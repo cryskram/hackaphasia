@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Patento</title>
+  </head>
+  <body>
+    <h1>AI Search For Patents</h1>
+    <input type="text" id="questionInput" placeholder="Prompt" />
+    <button onclick="performSearch()">Search</button>
+    <div id="results"></div>
+
+    <script>
+      function performSearch() {
+        const question = document.getElementById("questionInput").value;
+
+        fetch("/api/search", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ question: question }),
+        })
+          .then((response) => response.json())
+          .then((data) => displayResults(data.results))
+          .catch((e) => console.error("error: ", error));
+      }
+
+      function displayResults(results) {
+        const findDiv = document.getElementById("results");
+        findDiv.innerHTML = "";
+
+        results.forEach((result) => {
+          const resultEle = document.createElement("div");
+          resultEle.innerHTML = `<strong>Abstract:</strong> ${result.Abstract}`;
+          findDiv.appendChild(resultEle);
+        });
+      }
+    </script>
+  </body>
+</html>
